@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+
 android {
     namespace = "ru.alphadrow.gb.myweather"
     compileSdk = 34

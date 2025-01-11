@@ -2,7 +2,7 @@ package ru.alphadrow.gb.myweather.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ru.alphadrow.gb.myweather.R
-import ru.alphadrow.gb.myweather.vie.MainFragment
+import ru.alphadrow.gb.myweather.view.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
