@@ -26,33 +26,38 @@ class MainFragment : Fragment(), OnItemViewClickListener {
     private var adapter = MainFragmentAdapter()
     private lateinit var viewModel: MainViewModel
 
+
     companion object { //памятка: это нужно для объявления статичных вещей в kotlin
         fun newInstance(): Fragment {
             return MainFragment()
         }
+
+        const val REGION_SET_KEY = "REGION_SET_KEY"
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        if (savedInstanceState != null) {
+            isDataSetRus = savedInstanceState.getBoolean(REGION_SET_KEY)
+        }
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.mainFragmentRecyclerView.adapter = adapter
         adapter.setOnItemClickListener(this)
-        binding.mainFragmentFAB.setOnClickListener(object : View.OnClickListener{
+        setFABImage()
+        binding.mainFragmentFAB.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 isDataSetRus = !isDataSetRus
                 viewModel.getDataFromLocalSource(isDataSetRus)
-                if(isDataSetRus)
-                binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
-                else binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
+                setFABImage()
             }
 
         })
@@ -62,6 +67,12 @@ class MainFragment : Fragment(), OnItemViewClickListener {
             renderData(it)
         })
         viewModel.getDataFromLocalSource(isDataSetRus)
+    }
+
+    private fun setFABImage() {
+        if (isDataSetRus)
+            binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
+        else binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
     }
 
     fun renderData(appState: AppState) {
@@ -87,14 +98,20 @@ class MainFragment : Fragment(), OnItemViewClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
+
         _binding = null
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(REGION_SET_KEY, isDataSetRus)
     }
 
     override fun onItemClick(weather: Weather) {
         val bundle = Bundle()
         bundle.putParcelable(DetailsFragment.BUNDLE_WEATHER_KEY, weather)
         requireActivity().supportFragmentManager.beginTransaction()
-        .add(R.id.fragment_container, DetailsFragment.newInstance(bundle))
-        .addToBackStack("").commit()
+            .replace(R.id.fragment_container, DetailsFragment.newInstance(bundle))
+            .addToBackStack("").commit()
     }
 }

@@ -1,39 +1,14 @@
 package ru.alphadrow.gb.myweather.domain
 
-import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-
+@Parcelize
 data class Weather(val city:City=City("Москва", 55.0, 37.0),
                    val temperature: Int = -1,
                    val feelsLike:Int = -5
-):Parcelable {
-    constructor(parcel: Parcel) : this(
-        TODO("city"),
-        parcel.readInt(),
-        parcel.readInt()
-    ) {
-    }
+):Parcelable
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(temperature)
-        parcel.writeInt(feelsLike)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<Weather> {
-        override fun createFromParcel(parcel: Parcel): Weather {
-            return Weather(parcel)
-        }
-
-        override fun newArray(size: Int): Array<Weather?> {
-            return arrayOfNulls(size)
-        }
-    }
-}
 
 fun getWorldCities(): List<Weather> {
     return listOf(
