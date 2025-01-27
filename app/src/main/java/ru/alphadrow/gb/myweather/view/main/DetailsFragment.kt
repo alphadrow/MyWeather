@@ -21,6 +21,7 @@ class DetailsFragment : Fragment() {
             detailsFragment.arguments = bundle
             return detailsFragment
         }
+
         const val BUNDLE_WEATHER_KEY = "key"
     }
 
@@ -35,7 +36,8 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weather = arguments?.getParcelable<Weather>(BUNDLE_WEATHER_KEY) ?: Weather()  //TODO убрать deprecated (при этом рекомендованный метод требует уровень API не ниже 34)
+        val weather = arguments?.getParcelable<Weather>(BUNDLE_WEATHER_KEY)
+            ?: Weather()  //TODO убрать deprecated (при этом рекомендованный метод требует уровень API не ниже 34)
         setData(weather)
     }
 

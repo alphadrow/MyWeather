@@ -2,12 +2,13 @@ package ru.alphadrow.gb.myweather.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.alphadrow.gb.myweather.repository.Repository
 import ru.alphadrow.gb.myweather.repository.RepositoryImpl
 import java.lang.Thread.sleep
 
 class MainViewModel(
     private val LiveDataToObserver: MutableLiveData<AppState> = MutableLiveData(),
-    private val repositoryImpl: RepositoryImpl = RepositoryImpl()
+    private val repositoryImpl: Repository = RepositoryImpl()
 ) :
     ViewModel() {
     fun getLiveData() = LiveDataToObserver
