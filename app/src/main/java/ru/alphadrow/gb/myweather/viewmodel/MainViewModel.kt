@@ -4,24 +4,35 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.alphadrow.gb.myweather.repository.RepositoryImpl
 import java.lang.Thread.sleep
-import kotlin.random.Random
 
 class MainViewModel(
     private val LiveDataToObserver: MutableLiveData<AppState> = MutableLiveData(),
-    val repositoryImpl: RepositoryImpl = RepositoryImpl()
+    private val repositoryImpl: RepositoryImpl = RepositoryImpl()
 ) :
     ViewModel() {
     fun getLiveData() = LiveDataToObserver
 
-    fun getDataFromRemoteSource() {
+    fun getWeatherFromLocalSourceWorld() {
+        getDataFromLocalSource(false)
+    }
+
+    fun getWeatherFromLocalSourceRus() {
+        getDataFromLocalSource(true)
+    }
+
+    fun getDataFromLocalSource(isRussian: Boolean) {
         LiveDataToObserver.postValue(AppState.Loading)
         Thread {
-            sleep(2000)
-            if (Random.nextInt(100) > 50) {
-                LiveDataToObserver.postValue(AppState.Success(repositoryImpl.getWeatherFromRemoteSource()))
-            } else {
-                LiveDataToObserver.postValue(AppState.Error(IllegalStateException()))
-            }
+            sleep(1000)
+            getWeather(isRussian)
         }.start()
+    }
+
+    private fun getWeather(isRussian: Boolean) {
+        if (isRussian) {
+            LiveDataToObserver.postValue(AppState.Success(repositoryImpl.getWeatherFromLocalStorageRus()))
+        } else {
+            LiveDataToObserver.postValue(AppState.Success(repositoryImpl.getWeatherFromLocalStorageWorld()))
+        }
     }
 }
